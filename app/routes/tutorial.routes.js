@@ -7,6 +7,7 @@ module.exports = (app) => {
   router.post("/findStudentByClassID/:id", tutorials.findStudentByClassID);
 
   router.post("/findMarks/:id", tutorials.findMarks);
+  router.put("/updateMark/:id", tutorials.updateMark);
 
   router.post("/test", tutorials.test);
   router.get("/getAllClass", tutorials.getAllClass);
