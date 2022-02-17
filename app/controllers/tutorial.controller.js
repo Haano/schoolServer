@@ -13,12 +13,21 @@ exports.findMarks = (req, res) => {
   const id = req.body.classID;
   const date = req.body.date;
 
-  Marks.find({ classID: id, date: date }, function (err, arr) {
-    console.log(arr);
-    const obj = Object.assign({}, arr);
-    console.log(obj, "dadadasd++++++++++++++=arr");
-    res.send(obj);
-  });
+  if (id != null) {
+    Marks.find({ classID: id, date: date }, function (err, arr) {
+      console.log(arr);
+      const obj = Object.assign({}, arr);
+      console.log(obj, "dadadasd++++++++++++++=arr");
+      res.send(obj);
+    });
+  } else {
+    Marks.find({ date: date }, function (err, arr) {
+      console.log(arr);
+      const obj = Object.assign({}, arr);
+      console.log(obj, "dadadasd++++++++++++++=arr");
+      res.send(obj);
+    });
+  }
 };
 
 exports.findStudentByClassID = (req, res) => {
@@ -405,7 +414,10 @@ exports.createClass = (req, res) => {
   const sclass = new ClassList({
     className: req.body.className,
     classLider: req.body.classLider,
+    shift: req.body.shiftSchool,
   });
+
+  console.log(req.body);
 
   sclass
     .save(sclass)

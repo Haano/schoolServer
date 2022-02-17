@@ -5,6 +5,7 @@ module.exports = (mongoose) => {
       {
         className: String,
         classLider: String,
+        shift: String,
       },
       { timestamps: true }
     )
