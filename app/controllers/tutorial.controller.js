@@ -34,13 +34,21 @@ exports.findStudentByClassID = (req, res) => {
   console.log("Find STUDENTS BY CLASS ID", req.body.classID);
   const id = req.body.classID;
 
-  Students.find({ classID: id }, function (err, arr) {
-    console.log(arr);
-    const obj = Object.assign({}, arr);
-    console.log(obj, "dadadasd++++++++++++++=arr");
-    res.send(obj);
-  });
-
+  if (id != null) {
+    Students.find({ classID: id }, function (err, arr) {
+      console.log(arr);
+      const obj = Object.assign({}, arr);
+      console.log("STUDENTS 1 class", obj.length);
+      res.send(obj);
+    });
+  } else {
+    Students.find(function (err, arr) {
+      console.log(arr);
+      const obj = Object.assign({}, arr);
+      console.log("STUDENTS", obj.length);
+      res.send(obj);
+    });
+  }
   // Students.findById(id)
   //   .then((data) => {
   //     if (!data)
