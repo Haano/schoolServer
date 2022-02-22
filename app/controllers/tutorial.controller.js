@@ -8,6 +8,32 @@ const Dates = db.dates;
 const Causes = db.causes;
 const Marks = db.marks;
 
+exports.updateCat = (req, res) => {
+  if (!req.body) {
+    return res.status(400).send({
+      message: "Data to update can not be empty!",
+    });
+  }
+
+  const id = req.params.id;
+
+  Students.findByIdAndUpdate(id, {
+    Category: req.body[0],
+  })
+    .then((data) => {
+      if (!data) {
+        res.status(404).send({
+          message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found!`,
+        });
+      } else res.send({ message: "Tutorial was updated successfully." });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Error updating Tutorial with id=" + id,
+      });
+    });
+};
+
 exports.findMarks = (req, res) => {
   console.log("Find STUDENTS BY CLASS ID", req.body.classID);
   const id = req.body.classID;

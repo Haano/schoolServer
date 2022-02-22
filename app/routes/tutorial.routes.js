@@ -5,6 +5,7 @@ module.exports = (app) => {
 
   router.post("/findByClassID/:id", tutorials.findByClassID);
   router.post("/findStudentByClassID/:id", tutorials.findStudentByClassID);
+  router.put("/updateCat/:id", tutorials.updateCat);
 
   router.post("/findMarks/:id", tutorials.findMarks);
   router.put("/updateMark/:id", tutorials.updateMark);
