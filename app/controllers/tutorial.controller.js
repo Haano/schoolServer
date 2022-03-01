@@ -41,16 +41,12 @@ exports.findMarks = (req, res) => {
 
   if (id != null) {
     Marks.find({ classID: id, date: date }, function (err, arr) {
-      console.log(arr);
       const obj = Object.assign({}, arr);
-      console.log(obj, "dadadasd++++++++++++++=arr");
       res.send(obj);
     });
   } else {
     Marks.find({ date: date }, function (err, arr) {
-      console.log(arr);
       const obj = Object.assign({}, arr);
-      console.log(obj, "dadadasd++++++++++++++=arr");
       res.send(obj);
     });
   }
@@ -62,16 +58,12 @@ exports.findStudentByClassID = (req, res) => {
 
   if (id != null) {
     Students.find({ classID: id }, function (err, arr) {
-      console.log(arr);
       const obj = Object.assign({}, arr);
-      console.log("STUDENTS 1 class", obj.length);
       res.send(obj);
     });
   } else {
     Students.find(function (err, arr) {
-      console.log(arr);
       const obj = Object.assign({}, arr);
-      console.log("STUDENTS", obj.length);
       res.send(obj);
     });
   }
@@ -198,12 +190,10 @@ exports.createCategory = (req, res) => {
     res.status(400).send({ message: "Content can not be empty!" });
     return;
   }
-  console.log("ТУТ ВСЕ ОК");
   // Create a Tutorial
   const categoryss = new Categorys({
     cat: req.body.Category,
   });
-  console.log("вывел", categoryss);
   // Save Tutorial in the database
   categoryss
     .save(categoryss)
@@ -225,13 +215,10 @@ exports.createMarks = (req, res) => {
     res.status(400).send({ message: "Content can not be empty!" });
     return;
   }
-  console.log("ТУТ ВСЕ ОК");
   var arr = new Array();
   arr = req.body;
   // Create a Tutorial
-  console.log("перед циклом");
   for (var i = 0; i < arr.length; i++) {
-    console.log("for job");
     const marks = new Marks({
       date: arr[i].date,
       classID: arr[i].classID,
@@ -241,10 +228,7 @@ exports.createMarks = (req, res) => {
     });
     // Save Tutorial in the database
     marks.save(marks);
-
-    console.log("for job", i);
   }
-  console.log("после циклом");
 
   return;
 };
@@ -450,8 +434,6 @@ exports.createClass = (req, res) => {
     classLider: req.body.classLider,
     shift: req.body.shiftSchool,
   });
-
-  console.log(req.body);
 
   sclass
     .save(sclass)
