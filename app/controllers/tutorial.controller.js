@@ -1,5 +1,8 @@
 const db = require("../models");
 module.exports.ClassList = require("../models/classList.model");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
+
 const Tutorial = db.tutorials;
 const ClassList = db.classList;
 const Students = db.students;
@@ -7,6 +10,16 @@ const Categorys = db.category;
 const Dates = db.dates;
 const Causes = db.causes;
 const Marks = db.marks;
+
+exports.getFile = (req, res) => {
+  console.log(req);
+  ///////////
+  upload.single("avatar"),
+    function (req, res, next) {
+      // req.file is the `avatar` file
+      // req.body will hold the text fields, if there were any
+    };
+};
 
 exports.updateCat = (req, res) => {
   if (!req.body) {
@@ -286,7 +299,7 @@ exports.getAllClass = (req, res) => {
       });
     });
 };
-//////////// Students
+//////////// Students ////////////////
 exports.getAllStudents = (req, res) => {
   console.log("НАЙТИ ВСЕ");
 
@@ -333,6 +346,31 @@ exports.createStudent = (req, res) => {
       res.status(500).send({
         message:
           err.message || "Some error occurred while creating the ClassList.",
+      });
+    });
+};
+exports.deleteStudent = (req, res) => {
+  console.log("createStudent", req.body);
+  if (!req.params.id) {
+    res.status(400).send({ message: "Content can not be empty!" });
+    return;
+  }
+  const id = req.params.id;
+  Students.findByIdAndRemove(id)
+    .then((data) => {
+      if (!data) {
+        res.status(404).send({
+          message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`,
+        });
+      } else {
+        res.send({
+          message: "Tutorial was deleted successfully!",
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Could not delete Tutorial with id=" + id,
       });
     });
 };

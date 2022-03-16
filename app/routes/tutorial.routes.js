@@ -3,9 +3,12 @@ module.exports = (app) => {
 
   var router = require("express").Router();
 
+  router.post("/single-file", tutorials.getFile);
+
   router.post("/findByClassID/:id", tutorials.findByClassID);
   router.post("/findStudentByClassID/:id", tutorials.findStudentByClassID);
   router.put("/updateCat/:id", tutorials.updateCat);
+  router.delete("/student/:id", tutorials.deleteStudent);
 
   router.post("/findMarks/:id", tutorials.findMarks);
   router.put("/updateMark/:id", tutorials.updateMark);
