@@ -10,6 +10,7 @@ const Categorys = db.category;
 const Dates = db.dates;
 const Causes = db.causes;
 const Marks = db.marks;
+const Reciept = db.reciept;
 
 exports.getFile = (req, res) => {
   console.log(req);
@@ -19,6 +20,37 @@ exports.getFile = (req, res) => {
       // req.file is the `avatar` file
       // req.body will hold the text fields, if there were any
     };
+};
+
+exports.createReciept = (req, res) => {
+  console.log("createReciept", req.body);
+
+  if (!req.body.classID) {
+    res.status(400).send({ message: "Content can not be empty!" });
+    return;
+  }
+
+  const receipt = new Reciept({
+    classID: req.body.classID,
+    studentID: req.body.classID,
+    date: req.body.date,
+    cat: req.body.cat,
+    amount: req.body.amount,
+    identifier: req.body.identifier,
+    period: req.body.period,
+  });
+
+  receipt
+    .save(receipt)
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the ClassList.",
+      });
+    });
 };
 
 exports.updateCat = (req, res) => {
@@ -48,15 +80,25 @@ exports.updateCat = (req, res) => {
 };
 
 exports.findMarks = (req, res) => {
-  console.log("Find STUDENTS BY CLASS ID", req.body.classID);
+  console.log("Find MARKS BY CLASS ID", req.body.classID, req.body.date);
   const id = req.body.classID;
   const date = req.body.date;
-
+  console.log(date, id);
   if (id != null) {
-    Marks.find({ classID: id, date: date }, function (err, arr) {
-      const obj = Object.assign({}, arr);
-      res.send(obj);
-    });
+    if (date) {
+      Marks.find({ classID: id, date: date }, function (err, arr) {
+        const obj = Object.assign({}, arr);
+        console.log(obj);
+        res.send(obj);
+      });
+    } else {
+      console.log("АНЙТИ", id.classID);
+      Marks.find({ classID: id.classID }, function (err, arr) {
+        const obj = Object.assign({}, arr);
+        console.log(obj);
+        res.send(obj);
+      });
+    }
   } else {
     Marks.find({ date: date }, function (err, arr) {
       const obj = Object.assign({}, arr);

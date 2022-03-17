@@ -7,9 +7,8 @@ module.exports = (mongoose) => {
         studentID: String,
         date: Date,
         cat: String,
-        causesID: String,
         amount: Float32Array,
-        ID: String,
+        identifier: String,
         period: String,
       },
       { timestamps: true }
