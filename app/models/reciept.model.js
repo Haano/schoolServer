@@ -1,20 +1,15 @@
-// 17.03.2022
 module.exports = (mongoose) => {
-  const reciept = mongoose.model(
-    "marks",
-    mongoose.Schema(
-      {
-        classID: String,
-        studentID: String,
-        date: Date,
-        cat: String,
-        amount: Float32Array,
-        identifier: String,
-        period: String,
-      },
-      { timestamps: true }
-    )
-  );
-
-  return receipt;
+    const reciept = mongoose.model(
+        "reciept",
+        mongoose.Schema({
+            classID: String,
+            studentID: String,
+            date: Date,
+            cat: String,
+            amount: Number,
+            identifier: String,
+            period: String,
+        }, { timestamps: true }, ),
+    );
+    return reciept;
 };

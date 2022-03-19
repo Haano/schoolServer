@@ -13,4 +13,5 @@ db.category = require("./category.model.js")(mongoose);
 db.dates = require("./dates.model.js")(mongoose);
 db.causes = require("./causes.model.js")(mongoose);
 db.marks = require("./marks.model.js")(mongoose);
+db.reciept = require("./reciept.model.js")(mongoose);
 module.exports = db;
