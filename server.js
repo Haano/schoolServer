@@ -3,6 +3,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const fileUpload = require("express-fileupload");
 
 const app = express();
 
@@ -11,6 +12,7 @@ var corsOptions = {
     methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
 };
 
+app.use(fileUpload());
 app.use(cors(corsOptions));
 
 // parse requests of content-type - application/json
