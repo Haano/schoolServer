@@ -6,6 +6,7 @@ module.exports = (app) => {
   router.post("/single-file", tutorials.getFile);
 
   router.post("/createReciept", tutorials.createReciept);
+  router.post("/findReciept/:id", tutorials.findReciept);
 
   router.post("/findByClassID/:id", tutorials.findByClassID);
   router.post("/findStudentByClassID/:id", tutorials.findStudentByClassID);
