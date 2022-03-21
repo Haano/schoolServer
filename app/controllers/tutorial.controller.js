@@ -39,7 +39,7 @@ exports.getFile = (req, res) => {
 };
 
 exports.sendFile = (req, res) => {
-    const file = `${__dirname}/../../uploads/6234cb928d9eadf938f02564/NEWFILEfile (1).txt`;
+    const file = `${__dirname}/../../uploads/6234cb928d9eadf938f02564/NEWFILEMyPDF.pdf`;
 
     res.download(file);
     // const baseUrl = "http://localhost:8081/";
