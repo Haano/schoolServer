@@ -150,6 +150,56 @@ exports.findReciept = (req, res) => {
     }
     return;
 };
+exports.deleteReciept = (req, res) => {
+    const id = req.params.id;
+    console.log("delete RECIEPT ID = ", id);
+
+    Reciept.find({ _id: id }, function(err, arr) {
+        // const obj = Object.assign({}, arr);
+        // this.temp = arr;
+        //   console.log(arr);
+
+        console.log(arr);
+        let a = new Date(arr[0].date).toISOString().slice(0, 10);
+
+        console.log(a);
+        ClassList.find({
+                _id: arr[0].classID,
+            },
+
+            function(err, arrClass) {
+                console.log(arrClass[0].className);
+
+                let file = `${__dirname}/../../uploads/${arrClass[0].className}_${arr[0].classID}/${arr[0].studentID}/${a}_${arr[0].identifier}_${arr[0].fileName}`;
+
+                let fs = require("fs");
+                fs.unlink(file, (err) => {
+                    if (err) throw err; // не удалось удалить файл
+                    console.log("Файл успешно удалён");
+                });
+
+                console.log(file);
+                Reciept.findByIdAndRemove(id)
+                    .then((data) => {
+                        if (!data) {
+                            res.status(404).send({
+                                message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`,
+                            });
+                        } else {
+                            res.send({
+                                message: "Tutorial was deleted successfully!",
+                            });
+                        }
+                    })
+                    .catch((err) => {
+                        res.status(500).send({
+                            message: "Could not delete Tutorial with id=" + id,
+                        });
+                    });
+            },
+        );
+    });
+};
 
 exports.updateCat = (req, res) => {
     if (!req.body) {
