@@ -67,7 +67,7 @@ exports.getFile = (req, res) => {
           if (err) return res.status(500).send(err);
 
           res.send("File uploaded!");
-        }
+        },
       );
 
       console.log("Файл можно найти по пути:", dirToFile);
@@ -144,6 +144,44 @@ exports.findReciept = (req, res) => {
       const obj = Object.assign({}, arr);
       res.send(obj);
     });
+  } else {
+    Reciept.find(function (err, arr) {
+      const obj = Object.assign({}, arr);
+      res.send(obj);
+    });
+  }
+  return;
+};
+
+exports.findRecieptByDateRange = (req, res) => {
+  console.log("Find RECIEPT BY CLASS ID", req.body);
+  const id = req.body.classID;
+  const studentID = req.body.studentID;
+  if (id != null) {
+    if (studentID != null) {
+      Reciept.find(
+        {
+          classID: id,
+          studentID: studentID,
+          date: { $gte: req.body.dateFrom, $lte: req.body.dateBefore },
+        },
+        function (err, arr) {
+          const obj = Object.assign({}, arr);
+          res.send(obj);
+        },
+      );
+    } else {
+      Reciept.find(
+        {
+          classID: id,
+          date: { $gte: req.body.dateFrom, $lte: req.body.dateBefore },
+        },
+        function (err, arr) {
+          const obj = Object.assign({}, arr);
+          res.send(obj);
+        },
+      );
+    }
   } else {
     Reciept.find(function (err, arr) {
       const obj = Object.assign({}, arr);
@@ -271,7 +309,7 @@ exports.findStudentByClassID = (req, res) => {
       function (err, arr) {
         const obj = Object.assign({}, arr);
         res.send(obj);
-      }
+      },
     );
   } else {
     Students.find({}, null, { sort: "FirstName" }, function (err, arr) {
