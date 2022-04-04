@@ -18,6 +18,7 @@ module.exports = (app) => {
 
   router.post("/findMarks/:id", tutorials.findMarks);
   router.put("/updateMark/:id", tutorials.updateMark);
+  router.post("/findMarksByDateRange/", tutorials.findMarksByDateRange);
 
   router.post("/test", tutorials.test);
   router.get("/getAllClass", tutorials.getAllClass);

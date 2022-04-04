@@ -67,7 +67,7 @@ exports.getFile = (req, res) => {
           if (err) return res.status(500).send(err);
 
           res.send("File uploaded!");
-        },
+        }
       );
 
       console.log("Файл можно найти по пути:", dirToFile);
@@ -168,7 +168,7 @@ exports.findRecieptByDateRange = (req, res) => {
         function (err, arr) {
           const obj = Object.assign({}, arr);
           res.send(obj);
-        },
+        }
       );
     } else {
       Reciept.find(
@@ -179,7 +179,7 @@ exports.findRecieptByDateRange = (req, res) => {
         function (err, arr) {
           const obj = Object.assign({}, arr);
           res.send(obj);
-        },
+        }
       );
     }
   } else {
@@ -294,6 +294,30 @@ exports.findMarks = (req, res) => {
     });
   }
 };
+exports.findMarksByDateRange = (req, res) => {
+  console.log("Find MARKS BY CLASS ID", req.body.classID);
+  const id = req.body.classID;
+  console.log(id);
+  if (id != null) {
+    console.log("АНЙТИ", id.classID);
+    Marks.find(
+      {
+        classID: id.classID,
+        date: { $gte: req.body.dateFrom, $lte: req.body.dateBefore },
+      },
+      function (err, arr) {
+        const obj = Object.assign({}, arr);
+        console.log(obj);
+        res.send(obj);
+      }
+    );
+  } else {
+    Marks.find({ classID: id.classID }, function (err, arr) {
+      const obj = Object.assign({}, arr);
+      res.send(obj);
+    });
+  }
+};
 
 exports.findStudentByClassID = (req, res) => {
   console.log("Find STUDENTS BY CLASS ID", req.body.classID);
@@ -309,7 +333,7 @@ exports.findStudentByClassID = (req, res) => {
       function (err, arr) {
         const obj = Object.assign({}, arr);
         res.send(obj);
-      },
+      }
     );
   } else {
     Students.find({}, null, { sort: "FirstName" }, function (err, arr) {
@@ -335,7 +359,7 @@ exports.findByClassID = (req, res) => {
   console.log("FindBY CLASS ID", req.body);
   const id = req.body.classID;
 
-  ClassList.findById(id)
+  ClassList.findById(id, null, { sort: "className" })
     .then((data) => {
       if (!data)
         res.status(404).send({ message: "Not found Tutorial with id " + id });
@@ -525,7 +549,7 @@ exports.getAllClass = (req, res) => {
     ? { title: { $regex: new RegExp(title), $options: "i" } }
     : {};
 
-  ClassList.find(condition)
+  ClassList.find(condition, null, { sort: "className" })
     .then((data) => {
       res.send(data);
     })
