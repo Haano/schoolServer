@@ -506,10 +506,20 @@ exports.createMarks = (req, res) => {
       cat: arr[i].cat,
     });
     // Save Tutorial in the database
-    marks.save(marks);
+    Marks.find({
+      classID: arr[i].classID,
+      studentID: arr[i].studentID,
+      classID: arr[i].date,
+    }).then((data) => {
+      console.log(data, "НАШЕЛ??");
+
+      if (data.length === 0) {
+        marks.save(marks);
+      }
+    });
   }
 
-  return;
+  return res.send({ message: "OK!" });
 };
 
 exports.getCategorys = (req, res) => {
