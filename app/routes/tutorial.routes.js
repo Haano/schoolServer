@@ -1,7 +1,11 @@
 module.exports = (app) => {
   const tutorials = require("../controllers/tutorial.controller.js");
+  const loginAPI = require("../controllers/loginAPI.js");
 
   var router = require("express").Router();
+
+  router.post("/userLogin", loginAPI.userLogin);
+  router.put("/updatePassword/:id", loginAPI.updatePassword);
 
   router.post("/single-file", tutorials.getFile);
   router.post("/loadFileID", tutorials.sendFile);
