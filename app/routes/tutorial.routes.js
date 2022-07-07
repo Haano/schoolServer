@@ -1,6 +1,7 @@
 module.exports = (app) => {
   const tutorials = require("../controllers/tutorial.controller.js");
   const loginAPI = require("../controllers/loginAPI.js");
+  const clubsAPI = require("../controllers/clubsAPI.js");
 
   var router = require("express").Router();
 
@@ -30,11 +31,14 @@ module.exports = (app) => {
   router.get("/getAllCauses", tutorials.getAllCauses);
 
   router.get("/getCategory", tutorials.getCategorys);
+
+  router.get("/getClubs", clubsAPI.getAllClubs);
   router.post("/createClass", tutorials.createClass);
 
   router.post("/createDate", tutorials.createDate);
   router.post("/createCauses", tutorials.createCauses);
   router.post("/createMarks", tutorials.createMarks);
+  router.post("/createClub", clubsAPI.createClub);
 
   router.post("/createStudent", tutorials.createStudent);
 
