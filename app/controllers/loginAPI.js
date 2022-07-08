@@ -34,26 +34,26 @@ exports.updatePassword = (req, res) => {
     });
   }
 
-  ClassList.updateMany({ shift: "2 смена" }, { $set: { password: 1 } }).then(
-    (data) => {
-      console.log(data);
-    }
-  );
+  // ClassList.updateMany({ shift: "2 смена" }, { $set: { password: 1 } }).then(
+  //   (data) => {
+  //     console.log(data);
+  //   }
+  // );
 
-  //   ClassList.findByIdAndUpdate(id, {
-  //     password: pas,
-  //   })
-  //     .then((data) => {
-  //       console.log(data);
-  //       if (!data) {
-  //         res.status(404).send({
-  //           message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found!`,
-  //         });
-  //       } else res.send({ message: "Tutorial was updated successfully." });
-  //     })
-  //     .catch((err) => {
-  //       res.status(500).send({
-  //         message: "Error updating Tutorial with id=" + id,
-  //       });
-  //     });
+  ClassList.findByIdAndUpdate(req.body.id, {
+    password: req.body.passwordChange,
+  })
+    .then((data) => {
+      console.log(data);
+      if (!data) {
+        res.status(404).send({
+          message: `Cannot updatePassword with id=${req.body.id}. Maybe class was not found!`,
+        });
+      } else res.send({ message: "Password was updated successfully." });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Error updating Tutorial with id=" + req.body.id,
+      });
+    });
 };
