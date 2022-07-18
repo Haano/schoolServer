@@ -556,6 +556,11 @@ exports.getAllClass = (req, res) => {
 
     ClassList.find(condition, null, { sort: "className" })
         .then((data) => {
+            // Website you wish to allow to connect
+            res.header(
+                "ngrok-skip-browser-warning",
+                // "Origin, X-Requested-With, Content-Type, Accept",
+            );
             res.send(data);
         })
         .catch((err) => {
