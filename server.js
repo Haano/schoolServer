@@ -10,10 +10,22 @@ const app = express();
 var corsOptions = {
     origin: "*",
     methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
+    // optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    // origin: true,
+    // credentials: true,
 };
 
 app.use(fileUpload());
 app.use(cors(corsOptions));
+
+app.use(function(req, res, next) {
+    // res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+        "ngrok-skip-browser-warning",
+        // "Origin, X-Requested-With, Content-Type, Accept",
+    );
+    next();
+});
 
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
