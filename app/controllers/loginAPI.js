@@ -57,3 +57,31 @@ exports.updatePassword = (req, res) => {
       });
     });
 };
+
+var listClients = ["0"];
+
+exports.countAuth = (req, res) => {
+  console.log("ЗАШЕЛ", req.body);
+  console.log(
+    (req.headers["x-forwarded-for"] || "").split(",")[0],
+    req.connection.remoteAddress
+  );
+  let check = false;
+  for (let i = 0; i < listClients.length; i++) {
+    if (listClients[i].className === req.body.className) {
+      console.log("уже записан");
+      check = true;
+      break;
+    }
+  }
+  if (!check)
+    listClients.push({
+      ip: req.connection.remoteAddress,
+      className: req.body.className,
+    });
+  console.log(listClients);
+
+  return res.status(400).send({
+    message: "Data to update can not be empty!",
+  });
+};
