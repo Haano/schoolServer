@@ -3,6 +3,7 @@ module.exports.ClassList = require("../models/classList.model");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 const mongoose = require("mongoose");
+const { time } = require("console");
 
 const Reciept = db.reciept;
 const Tutorial = db.tutorials;
@@ -14,6 +15,15 @@ const Causes = db.causes;
 const Marks = db.marks;
 
 let temp = [];
+
+exports.getDateWorld = (req, res) => {
+    console.log("запрос даты");
+    let date;
+    date = new Date();
+
+    console.log(date);
+    res.send(date);
+};
 
 exports.loadImportStudentsTemplates = (req, res) => {
     // //findRecieptByid(req.body.id);
