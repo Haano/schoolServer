@@ -592,7 +592,7 @@ exports.getAllClass = (req, res) => {
     ? { title: { $regex: new RegExp(title), $options: "i" } }
     : {};
 
-  ClassList.find(condition, null, { sort: "className" })
+  ClassList.find(condition, { password: 0 }, { sort: "className" })
     .then((data) => {
       // Website you wish to allow to connect
       res.header(
