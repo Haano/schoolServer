@@ -25,6 +25,57 @@ exports.getDateWorld = (req, res) => {
     res.send(date);
 };
 
+exports.deleteDublecateMarks = (req, res) => {
+    console.log("Dublicate DEL", req.body.date);
+
+    const date = req.body.date;
+
+    Marks.find({ date: date }, function(err, arr) {
+        let duble = [];
+        let students = [];
+        console.log(arr.length);
+
+        for (let i = 0; i < arr.length; i++) {
+            students.push(arr[i].studentID);
+        }
+
+        let uniqueArray = [...new Set(students)];
+
+        console.log(uniqueArray.length);
+
+        for (let i = 0; i < uniqueArray.length; i++) {
+            Marks.find({ date: date, studentID: uniqueArray[i] },
+                function(err, arr2) {
+                    if (arr2.length > 1) {
+                        for (let j = 1; j < arr2.length; j++) {
+                            console.log(arr2[j]._id);
+                            Marks.findByIdAndRemove(arr2[j]._id)
+                                .then((data) => {
+                                    if (!data) {
+                                        res.status(404).send({
+                                            message: `Maybe Tutorial was not found!`,
+                                        });
+                                    } else {
+                                        res.send({
+                                            message: "successfully!",
+                                        });
+                                    }
+                                })
+                                .catch((err) => {
+                                    res.status(500).send({
+                                        message: "Could not delete id=",
+                                    });
+                                });
+                        }
+                    }
+                },
+            );
+        }
+
+        //const obj = Object.assign({}, arr);
+    });
+};
+
 exports.loadImportStudentsTemplates = (req, res) => {
     // //findRecieptByid(req.body.id);
     let filename = "import_students.xlsx";
@@ -534,7 +585,7 @@ exports.createMarks = (req, res) => {
         Marks.find({
             classID: arr[i].classID,
             studentID: arr[i].studentID,
-            classID: arr[i].date,
+            date: arr[i].date,
         }).then((data) => {
             if (data.length === 0) {
                 marks.save(marks);

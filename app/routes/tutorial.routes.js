@@ -1,83 +1,85 @@
 module.exports = (app) => {
-  const tutorials = require("../controllers/tutorial.controller.js");
-  const loginAPI = require("../controllers/loginAPI.js");
-  const clubsAPI = require("../controllers/clubsAPI.js");
+    const tutorials = require("../controllers/tutorial.controller.js");
+    const loginAPI = require("../controllers/loginAPI.js");
+    const clubsAPI = require("../controllers/clubsAPI.js");
 
-  var router = require("express").Router();
+    var router = require("express").Router();
 
-  router.get("/getDateWorld", tutorials.getDateWorld);
-  router.post("/userLogin", loginAPI.userLogin);
+    router.get("/getDateWorld", tutorials.getDateWorld);
+    router.post("/userLogin", loginAPI.userLogin);
 
-  router.post("/auth", loginAPI.countAuth);
+    router.post("/auth", loginAPI.countAuth);
 
-  router.put("/updatePassword/:id", loginAPI.updatePassword);
+    router.put("/updatePassword/:id", loginAPI.updatePassword);
 
-  router.post("/single-file", tutorials.getFile);
-  router.post("/loadFileID", tutorials.sendFile);
-  router.get(
-    "/loadImportStudentsTemplates",
-    tutorials.loadImportStudentsTemplates
-  );
-  router.get("/loadImportClassTemplates", tutorials.loadImportClassTemplates);
+    router.post("/single-file", tutorials.getFile);
+    router.post("/loadFileID", tutorials.sendFile);
+    router.get(
+        "/loadImportStudentsTemplates",
+        tutorials.loadImportStudentsTemplates,
+    );
+    router.post("/deleteDublecateMarks", tutorials.deleteDublecateMarks);
 
-  router.post("/createReciept", tutorials.createReciept);
-  router.post("/findReciept/:id", tutorials.findReciept);
-  router.post("/findRecieptByDateRange/", tutorials.findRecieptByDateRange);
-  router.delete("/deleteReciept/:id", tutorials.deleteReciept);
+    router.get("/loadImportClassTemplates", tutorials.loadImportClassTemplates);
 
-  router.post("/findByClassID/:id", tutorials.findByClassID);
-  router.post("/findStudentByClassID/:id", tutorials.findStudentByClassID);
-  router.put("/updateCat/:id", tutorials.updateCat);
-  router.delete("/student/:id", tutorials.deleteStudent);
+    router.post("/createReciept", tutorials.createReciept);
+    router.post("/findReciept/:id", tutorials.findReciept);
+    router.post("/findRecieptByDateRange/", tutorials.findRecieptByDateRange);
+    router.delete("/deleteReciept/:id", tutorials.deleteReciept);
 
-  router.post("/findMarks/:id", tutorials.findMarks);
-  router.put("/updateMark/:id", tutorials.updateMark);
-  router.post("/findMarksByDateRange/", tutorials.findMarksByDateRange);
+    router.post("/findByClassID/:id", tutorials.findByClassID);
+    router.post("/findStudentByClassID/:id", tutorials.findStudentByClassID);
+    router.put("/updateCat/:id", tutorials.updateCat);
+    router.delete("/student/:id", tutorials.deleteStudent);
 
-  router.post("/test", tutorials.test);
-  router.get("/getAllClass", tutorials.getAllClass);
+    router.post("/findMarks/:id", tutorials.findMarks);
+    router.put("/updateMark/:id", tutorials.updateMark);
+    router.post("/findMarksByDateRange/", tutorials.findMarksByDateRange);
 
-  router.get("/getAllCauses", tutorials.getAllCauses);
+    router.post("/test", tutorials.test);
+    router.get("/getAllClass", tutorials.getAllClass);
 
-  router.get("/getCategory", tutorials.getCategorys);
+    router.get("/getAllCauses", tutorials.getAllCauses);
 
-  router.get("/getClubs", clubsAPI.getAllClubs);
-  router.post("/createClass", tutorials.createClass);
+    router.get("/getCategory", tutorials.getCategorys);
 
-  router.post("/createDate", tutorials.createDate);
-  router.post("/createCauses", tutorials.createCauses);
-  router.post("/createMarks", tutorials.createMarks);
-  router.post("/createClub", clubsAPI.createClub);
+    router.get("/getClubs", clubsAPI.getAllClubs);
+    router.post("/createClass", tutorials.createClass);
 
-  router.post("/createStudent", tutorials.createStudent);
+    router.post("/createDate", tutorials.createDate);
+    router.post("/createCauses", tutorials.createCauses);
+    router.post("/createMarks", tutorials.createMarks);
+    router.post("/createClub", clubsAPI.createClub);
 
-  router.post("/createCategory", tutorials.createCategory);
+    router.post("/createStudent", tutorials.createStudent);
 
-  router.post("/addClubsStudent", clubsAPI.addClubStudent);
-  router.post("/recalculateClubStat", clubsAPI.recalculateClubStat);
+    router.post("/createCategory", tutorials.createCategory);
 
-  // Create a new Tutorial
-  router.post("/tutorials", tutorials.create);
+    router.post("/addClubsStudent", clubsAPI.addClubStudent);
+    router.post("/recalculateClubStat", clubsAPI.recalculateClubStat);
 
-  // Retrieve all Tutorials
-  router.get("/tutorials", tutorials.findAll);
+    // Create a new Tutorial
+    router.post("/tutorials", tutorials.create);
 
-  // Retrieve all published Tutorials
-  //router.get("/published", tutorials.findAllPublished);
+    // Retrieve all Tutorials
+    router.get("/tutorials", tutorials.findAll);
 
-  // Retrieve a single Tutorial with id
-  router.get("/tutorials/:id", tutorials.findOne);
+    // Retrieve all published Tutorials
+    //router.get("/published", tutorials.findAllPublished);
 
-  // Update a Tutorial with id
-  router.put("/tutorials/:id", tutorials.update);
+    // Retrieve a single Tutorial with id
+    router.get("/tutorials/:id", tutorials.findOne);
 
-  // Delete a Tutorial with id
-  router.delete("/tutorials/:id", tutorials.delete);
-  router.delete("/causes/:id", tutorials.deleteCauses);
-  router.delete("/category/:id", tutorials.deleteCategory);
+    // Update a Tutorial with id
+    router.put("/tutorials/:id", tutorials.update);
 
-  // Create a new Tutorial
-  router.delete("/tutorials", tutorials.deleteAll);
+    // Delete a Tutorial with id
+    router.delete("/tutorials/:id", tutorials.delete);
+    router.delete("/causes/:id", tutorials.deleteCauses);
+    router.delete("/category/:id", tutorials.deleteCategory);
 
-  app.use("/tutorials", router);
+    // Create a new Tutorial
+    router.delete("/tutorials", tutorials.deleteAll);
+
+    app.use("/tutorials", router);
 };
