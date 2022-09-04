@@ -4,25 +4,27 @@ const ClassList = db.classList;
 
 exports.userLogin = (req, res) => {
   console.log("LOGIN ", req.body);
-  if (!req.body.password) {
-    res.status(400).send({ message: "Content can not be empty!" });
-    return;
-  }
+  if (req.body.className) {
+    if (!req.body.password) {
+      res.status(400).send({ message: "Content can not be empty!" });
+      return;
+    }
 
-  let passwordString = req.body.password.toString();
-  if (req.body.className === "АДМИНИСТРАТОР") {
-    console.log("попытка входа", req.body.password);
-    if (req.body.password === "01091867")
-      res.send({ auth: true, accessRights: 2 });
-    else res.send({ auth: false });
-  } else {
-    ClassList.find({ className: req.body.className }, function (err, result) {
-      let obj = Object.assign({}, result);
-      console.log("попытка входа", obj[0].password, " ", req.body.password);
-      if (passwordString === obj[0].password)
-        res.send({ auth: true, accessRights: 1 });
+    let passwordString = req.body.password.toString();
+    if (req.body.className === "АДМИНИСТРАТОР") {
+      console.log("попытка входа", req.body.password);
+      if (req.body.password === "01091867")
+        res.send({ auth: true, accessRights: 2 });
       else res.send({ auth: false });
-    });
+    } else {
+      ClassList.find({ className: req.body.className }, function (err, result) {
+        let obj = Object.assign({}, result);
+        console.log("попытка входа", obj, " ", req.body.password);
+        if (passwordString === obj[0].password)
+          res.send({ auth: true, accessRights: 1 });
+        else res.send({ auth: false });
+      });
+    }
   }
 };
 

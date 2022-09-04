@@ -91,7 +91,27 @@ exports.addClubStudent = (req, res) => {
     .then((data) => {
       if (!data) {
         console.log("Ошибка!");
-      } else console.log("Удалил везде студента!");
+      } else {
+        console.log("Удалил везде студента!");
+        for (let i = 0; i < clubsStudentNow.length; i++) {
+          Clubs.updateOne(
+            { _id: clubsStudentNow[i] },
+            { $addToSet: { students: idStudent } }
+          )
+            .then((data) => {
+              if (!data) {
+                console.log("Ошибка");
+              } else console.log("Успешно добавил студента");
+            })
+            .catch((err) => {
+              res.status(500).send({
+                message:
+                  err.message ||
+                  "Some error occurred while retrieving tutorials.",
+              });
+            });
+        }
+      }
     })
     .catch((err) => {
       res.status(500).send({
@@ -99,24 +119,6 @@ exports.addClubStudent = (req, res) => {
           err.message || "Some error occurred while retrieving tutorials.",
       });
     });
-
-  for (let i = 0; i < clubsStudentNow.length; i++) {
-    Clubs.updateOne(
-      { _id: clubsStudentNow[i] },
-      { $addToSet: { students: idStudent } }
-    )
-      .then((data) => {
-        if (!data) {
-          console.log("Ошибка");
-        } else console.log("Успешно добавил студента");
-      })
-      .catch((err) => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while retrieving tutorials.",
-        });
-      });
-  }
 };
 
 exports.recalculateClubStat = (req, res) => {
@@ -161,5 +163,62 @@ exports.recalculateClubStat = (req, res) => {
       }
     });
   });
+
   res.send(studentsDel);
+};
+
+exports.recalculateClubStudent = (req, res) => {
+  let check = false;
+  Students.find({}, null, { sort: "FirstName" }, function (err, arrStudents) {
+    console.log(arrStudents.length);
+    Clubs.find({}, null, function (err, arrClub) {
+      console.log(arrClub.length);
+      for (let i = 0; i < arrStudents.length; i++) {
+        for (let j = 0; j < arrStudents[i].Clubs.length; j++) {
+          for (let k = 0; k < arrClub.length; k++) {
+            if (arrStudents[i].Clubs[j] == arrClub[k]._id) {
+              console.log(
+                "у Ученика ",
+                arrStudents[i].FirstName,
+                " есть кружок ",
+                arrClub[k].name
+              );
+              check = false;
+              for (let t = 0; t < arrClub[k].students.length; t++) {
+                if (arrClub[k].students[t] == arrStudents[i]._id) {
+                  check = true;
+                }
+              }
+              if (check == false) {
+                console.log(
+                  "Ученика ",
+                  arrStudents[i].FirstName,
+                  " нужно добавить в кружок ",
+                  arrClub[k].name
+                );
+                Clubs.updateOne(
+                  { _id: arrClub[k]._id },
+                  { $addToSet: { students: arrStudents[i]._id } }
+                )
+                  .then((data) => {
+                    if (!data) {
+                      console.log("Ошибка");
+                    } else console.log("Успешно добавил студента");
+                  })
+                  .catch((err) => {
+                    res.status(500).send({
+                      message:
+                        err.message ||
+                        "Some error occurred while retrieving tutorials.",
+                    });
+                  });
+              }
+              check = false;
+            }
+          }
+        }
+      }
+      res.send(check);
+    });
+  });
 };
