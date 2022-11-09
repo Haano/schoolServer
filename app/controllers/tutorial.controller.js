@@ -337,6 +337,31 @@ exports.updateCat = (req, res) => {
     });
 };
 
+exports.updateCatOrderStudent = (req, res) => {
+  if (!req.body) {
+    return res.status(400).send({
+      message: "Data to update can not be empty!",
+    });
+  }
+
+  const id = req.params.id;
+  Students.findByIdAndUpdate(id, {
+    Order: req.body[0],
+  })
+    .then((data) => {
+      if (!data) {
+        res.status(404).send({
+          message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found!`,
+        });
+      } else res.send({ message: "Tutorial was updated successfully." });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Error updating Tutorial with id=" + id,
+      });
+    });
+};
+
 exports.findMarks = (req, res) => {
   console.log("Find MARKS BY CLASS ID", req.body.classID, req.body.date);
   const id = req.body.classID;
@@ -510,6 +535,7 @@ exports.createDate = (req, res) => {
 
 exports.test = (req, res) => {
   console.log(req.body);
+  res.send("Hello, test OK");
   return;
 };
 ///////////////

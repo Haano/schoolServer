@@ -10,6 +10,7 @@ module.exports = (mongoose) => {
         Clubs: Array,
         // ReceiptDate: Date,
         Category: String,
+        Order: Object,
       },
       { timestamps: true }
     )
