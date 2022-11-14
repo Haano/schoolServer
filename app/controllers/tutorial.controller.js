@@ -852,11 +852,14 @@ exports.createClass = (req, res) => {
     return;
   }
 
+  console.log(req.body);
+
   const sclass = new ClassList({
     className: req.body.className,
     classLider: req.body.classLider,
     shift: req.body.shiftSchool,
     password: req.body.password,
+    level: req.body.level,
   });
 
   sclass
@@ -868,6 +871,32 @@ exports.createClass = (req, res) => {
       res.status(500).send({
         message:
           err.message || "Some error occurred while creating the ClassList.",
+      });
+    });
+};
+
+exports.updateLevelEduClass = (req, res) => {
+  console.log("смена уровня образования", req.body);
+  if (!req.body.level) {
+    return res.status(400).send({
+      message: "Data to update can not be empty!",
+    });
+  }
+
+  ClassList.findByIdAndUpdate(req.body.id, {
+    level: req.body.level,
+  })
+    .then((data) => {
+      console.log(data);
+      if (!data) {
+        res.status(404).send({
+          message: `Cannot updatePassword with id=${req.body.id}. Maybe class was not found!`,
+        });
+      } else res.send({ message: "Password was updated successfully." });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Error updating Tutorial with id=" + req.body.id,
       });
     });
 };

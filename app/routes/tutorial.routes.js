@@ -46,6 +46,7 @@ module.exports = (app) => {
 
   router.get("/getClubs", clubsAPI.getAllClubs);
   router.post("/createClass", tutorials.createClass);
+  router.put("/updateLevelEduClass/:id", tutorials.updateLevelEduClass);
 
   router.post("/createDate", tutorials.createDate);
   router.post("/createCauses", tutorials.createCauses);
