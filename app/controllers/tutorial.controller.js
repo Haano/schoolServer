@@ -20,9 +20,11 @@ exports.getDateWorld = (req, res) => {
   console.log("запрос даты");
   let date;
   date = new Date();
+  date.setHours(date.getHours() + 3);
 
-  console.log(date);
-  res.send(date);
+  let tempDate = new Date(date);
+  console.log(date, tempDate);
+  res.send(tempDate);
 };
 
 exports.deleteDublecateMarks = (req, res) => {
