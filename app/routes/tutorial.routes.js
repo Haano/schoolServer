@@ -51,6 +51,7 @@ module.exports = (app) => {
   router.post("/createDate", tutorials.createDate);
   router.post("/createCauses", tutorials.createCauses);
   router.post("/createMarks", tutorials.createMarks);
+  router.post("/createMarksEating", tutorials.createMarksEating);
   router.post("/createClub", clubsAPI.createClub);
 
   router.post("/createStudent", tutorials.createStudent);

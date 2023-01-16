@@ -606,12 +606,17 @@ exports.createMarks = (req, res) => {
   arr = req.body;
   // Create a Tutorial
   for (var i = 0; i < arr.length; i++) {
+    let tempCountEating = 0;
+    if (arr[i].countEating != undefined && arr[i].countEating != null) {
+      tempCountEating = arr[i].countEating;
+    }
     const marks = new Marks({
       date: arr[i].date,
       classID: arr[i].classID,
       studentID: arr[i].studentID,
       causesID: arr[i].causesID,
       cat: arr[i].cat,
+      countEating: tempCountEating,
     });
     // Save Tutorial in the database
     Marks.find({
@@ -833,6 +838,7 @@ exports.updateMark = (req, res) => {
   Marks.findByIdAndUpdate(id, {
     date: req.body.date,
     causesID: req.body.causes,
+    countEating: req.body.countEating,
   })
     .then((data) => {
       if (!data) {
@@ -844,6 +850,26 @@ exports.updateMark = (req, res) => {
     .catch((err) => {
       res.status(500).send({
         message: "Error updating Tutorial with id=" + id,
+      });
+    });
+};
+
+exports.createMarksEating = (req, res) => {
+  Marks.updateMany(
+    { causesID: { $eq: "Питался" } },
+    { $set: { countEating: 1 } }
+  )
+    .then((data) => {
+      if (!data) {
+        console.log("Ошибка!");
+      } else {
+        console.log("Обновил все марки");
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving tutorials.",
       });
     });
 };
