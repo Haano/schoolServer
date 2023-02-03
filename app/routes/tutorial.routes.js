@@ -26,6 +26,7 @@ module.exports = (app) => {
   router.post("/findReciept/:id", tutorials.findReciept);
   router.post("/findRecieptByDateRange/", tutorials.findRecieptByDateRange);
   router.delete("/deleteReciept/:id", tutorials.deleteReciept);
+  router.post("/PayReciept", tutorials.PayReciept);
 
   router.post("/findByClassID/:id", tutorials.findByClassID);
   router.post("/findStudentByClassID/:id", tutorials.findStudentByClassID);

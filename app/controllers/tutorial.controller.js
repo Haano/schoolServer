@@ -191,6 +191,7 @@ exports.createReciept = (req, res) => {
         identifier: req.body.identifier,
         period: req.body.period,
         fileName: req.body.fileName,
+        pay: false,
       });
 
       reciept
@@ -312,6 +313,30 @@ exports.deleteReciept = (req, res) => {
 
     //   });
   });
+};
+
+exports.PayReciept = (req, res) => {
+  console.log("PAY Reciept", req.body.recieptList);
+  if (!req.body.recieptList) {
+    res.status(400).send({ message: "Content can not be empty!" });
+    return;
+  }
+
+  Reciept.updateMany({ _id: { $in: req.body.recieptList } }, { pay: true })
+    .then((data) => {
+      if (!data) {
+        console.log("Ошибка!");
+      } else {
+        console.log("Обновил статус квитанции!");
+        res.send({ message: "Успешно" });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving tutorials.",
+      });
+    });
 };
 
 exports.updateCat = (req, res) => {

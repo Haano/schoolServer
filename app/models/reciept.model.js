@@ -11,6 +11,7 @@ module.exports = (mongoose) => {
         identifier: String,
         period: String,
         fileName: String,
+        pay: Boolean,
       },
       { timestamps: true }
     )
