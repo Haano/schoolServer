@@ -209,6 +209,36 @@ exports.createReciept = (req, res) => {
     }
   });
 };
+
+exports.createRecieptNotCheck = (req, res) => {
+  console.log("Create Reciept");
+  if (!req.body.classID) {
+    res.status(400).send({ message: "Content can not be empty!" });
+    return;
+  }
+  const reciept = new Reciept({
+    classID: req.body.classID,
+    studentID: req.body.studentID,
+    date: req.body.date,
+    cat: req.body.cat,
+    amount: req.body.amount,
+    identifier: req.body.identifier,
+    period: req.body.period,
+    fileName: req.body.fileName,
+    pay: false,
+  });
+  reciept
+    .save(reciept)
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the ClassList.",
+      });
+    });
+};
 exports.findReciept = (req, res) => {
   console.log("Find RECIEPT BY CLASS ID", req.body.classID);
   const id = req.body.classID;
@@ -864,6 +894,35 @@ exports.updateMark = (req, res) => {
     date: req.body.date,
     causesID: req.body.causes,
     countEating: req.body.countEating,
+  })
+    .then((data) => {
+      if (!data) {
+        res.status(404).send({
+          message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found!`,
+        });
+      } else res.send({ message: "Tutorial was updated successfully." });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Error updating Tutorial with id=" + id,
+      });
+    });
+};
+exports.updateMarkAdmin = (req, res) => {
+  if (!req.body) {
+    return res.status(400).send({
+      message: "Data to update can not be empty!",
+    });
+  }
+
+  const id = req.params.id;
+  console.log("updateMarkADMIN!!!!!!!!!!", req.body, id);
+
+  Marks.findByIdAndUpdate(id, {
+    date: req.body.date,
+    causesID: req.body.causes,
+    countEating: req.body.countEating,
+    cat: req.body.cat,
   })
     .then((data) => {
       if (!data) {

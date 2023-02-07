@@ -36,6 +36,7 @@ module.exports = (app) => {
 
   router.post("/findMarks/:id", tutorials.findMarks);
   router.put("/updateMark/:id", tutorials.updateMark);
+  router.put("/updateMarkAdmin/:id", tutorials.updateMarkAdmin);
   router.post("/findMarksByDateRange/", tutorials.findMarksByDateRange);
 
   router.post("/test", tutorials.test);
