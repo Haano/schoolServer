@@ -2,6 +2,7 @@ module.exports = (app) => {
   const tutorials = require("../controllers/tutorial.controller.js");
   const loginAPI = require("../controllers/loginAPI.js");
   const clubsAPI = require("../controllers/clubsAPI.js");
+  const adAPI = require("../controllers/adAPI.js");
 
   var router = require("express").Router();
 
@@ -86,6 +87,11 @@ module.exports = (app) => {
 
   // Create a new Tutorial
   router.delete("/tutorials", tutorials.deleteAll);
+
+  //ad
+  router.post("/createAD", adAPI.createAD);
+  router.get("/getAD", adAPI.getAllAD);
+  router.delete("/AD/:id", adAPI.deleteAD);
 
   app.use("/tutorials", router);
 };

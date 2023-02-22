@@ -15,4 +15,5 @@ db.causes = require("./causes.model.js")(mongoose);
 db.marks = require("./marks.model.js")(mongoose);
 db.reciept = require("./reciept.model.js")(mongoose);
 db.clubs = require("./clubs.model.js")(mongoose);
+db.postAd = require("./postAd.model.js")(mongoose);
 module.exports = db;
