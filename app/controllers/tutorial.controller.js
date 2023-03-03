@@ -650,7 +650,7 @@ exports.createCategory = (req, res) => {
     });
 };
 
-exports.createMarks = (req, res) => {
+exports.createMarks = async (req, res) => {
   console.log("createMarks!!!!!!!!!!");
   // Validate request
   if (!req.body) {
@@ -674,7 +674,7 @@ exports.createMarks = (req, res) => {
       countEating: tempCountEating,
     });
     // Save Tutorial in the database
-    Marks.find({
+    await Marks.find({
       classID: arr[i].classID,
       studentID: arr[i].studentID,
       date: arr[i].date,
