@@ -17,5 +17,14 @@
   "main": "server.js",
   "author": "",
   "license": "ISC",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Haano/schoolServer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Haano/schoolServer/issues"
+  },
+  "homepage": "https://github.com/Haano/schoolServer#readme",
   "description": ""
 }

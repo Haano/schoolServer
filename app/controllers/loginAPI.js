@@ -19,7 +19,7 @@ exports.userLogin = (req, res) => {
     } else {
       ClassList.find({ className: req.body.className }, function (err, result) {
         let obj = Object.assign({}, result);
-        console.log("попытка входа", obj, " ", req.body.password);
+        console.log("попытка входа", obj[0].classLider, " ", req.body.password);
         if (passwordString === obj[0].password)
           res.send({ auth: true, accessRights: 1 });
         else res.send({ auth: false });
