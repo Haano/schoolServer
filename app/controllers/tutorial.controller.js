@@ -702,7 +702,13 @@ exports.createMarks = async (req, res) => {
     arrStudentID.push(allIds[i].studentID);
     arrDate.push(allIds[i].date);
   }
-  console.log(arrDate[0], arrClassID[0], arrStudentID);
+  console.log(
+    "отправка на ",
+    arrDate[0],
+    arrClassID[0],
+    "количество:",
+    arrStudentID.length
+  );
   const existingRecords = await Marks.find({
     classID: arrClassID[0],
     studentID: { $in: arrStudentID },
@@ -717,18 +723,27 @@ exports.createMarks = async (req, res) => {
   //console.log("2:", existingRecords);
   //console.log("missingItems", missingItems);
   // пишем
-  const result = await db.marks.insertMany(
-    missingItems.map((item) => ({
-      classID: item.classID,
-      studentID: item.studentID,
-      date: item.date,
-      causesID: item.causesID,
-      cat: item.cat,
-      countEating: item.countEating,
-    }))
-  );
-
-  return res.send({ message: "OK!" });
+  const result = await db.marks
+    .insertMany(
+      missingItems.map((item) => ({
+        classID: item.classID,
+        studentID: item.studentID,
+        date: item.date,
+        causesID: item.causesID,
+        cat: item.cat,
+        countEating: item.countEating,
+      }))
+    )
+    .then((data) => {
+      console.log("создано:", data.length);
+      res.send({ message: "OK!", countMarks: data.length });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving tutorials.",
+      });
+    });
 };
 
 exports.getCategorys = (req, res) => {
