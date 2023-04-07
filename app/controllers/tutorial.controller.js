@@ -660,30 +660,73 @@ exports.createMarks = async (req, res) => {
   var arr = new Array();
   arr = req.body;
   // Create a Tutorial
-  for (var i = 0; i < arr.length; i++) {
-    let tempCountEating = 0;
-    if (arr[i].countEating != undefined && arr[i].countEating != null) {
-      tempCountEating = arr[i].countEating;
-    }
-    const marks = new Marks({
-      date: arr[i].date,
-      classID: arr[i].classID,
-      studentID: arr[i].studentID,
-      causesID: arr[i].causesID,
-      cat: arr[i].cat,
-      countEating: tempCountEating,
-    });
-    // Save Tutorial in the database
-    await Marks.find({
-      classID: arr[i].classID,
-      studentID: arr[i].studentID,
-      date: arr[i].date,
-    }).then((data) => {
-      if (data.length === 0) {
-        marks.save(marks);
-      }
-    });
+  // for (var i = 0; i < arr.length; i++) {
+  //   let tempCountEating = 0;
+  //   if (arr[i].countEating != undefined && arr[i].countEating != null) {
+  //     tempCountEating = arr[i].countEating;
+  //   }
+  //   const marks = new Marks({
+  //     date: arr[i].date,
+  //     classID: arr[i].classID,
+  //     studentID: arr[i].studentID,
+  //     causesID: arr[i].causesID,
+  //     cat: arr[i].cat,
+  //     countEating: tempCountEating,
+  //   });
+  //   // Save Tutorial in the database
+  //   // await Marks.find({
+  //   //   classID: arr[i].classID,
+  //   //   studentID: arr[i].studentID,
+  //   //   date: arr[i].date,
+  //   // }).then((data) => {
+  //   //   if (data.length === 0) {
+  //   //     marks.save(marks);
+  //   //   }
+  //   // });
+  // }
+
+  // фильтруем
+  const allIds = arr.map((item) => {
+    return {
+      classID: item.classID,
+      studentID: item.studentID,
+      date: item.date,
+    };
+  });
+
+  let arrClassID = [];
+  let arrStudentID = [];
+  let arrDate = [];
+  for (let i = 0; i < allIds.length; i++) {
+    arrClassID.push(allIds[i].classID);
+    arrStudentID.push(allIds[i].studentID);
+    arrDate.push(allIds[i].date);
   }
+  console.log(arrDate[0], arrClassID[0], arrStudentID);
+  const existingRecords = await Marks.find({
+    classID: arrClassID[0],
+    studentID: { $in: arrStudentID },
+    date: arrDate[0],
+  });
+  const existingIds = existingRecords.map((r) => r.studentID);
+  const missingItems = arr.filter(
+    (item) => !existingIds.includes(item.studentID)
+  );
+
+  // console.log("ALL:", allIds.length);
+  //console.log("2:", existingRecords);
+  //console.log("missingItems", missingItems);
+  // пишем
+  const result = await db.marks.insertMany(
+    missingItems.map((item) => ({
+      classID: item.classID,
+      studentID: item.studentID,
+      date: item.date,
+      causesID: item.causesID,
+      cat: item.cat,
+      countEating: item.countEating,
+    }))
+  );
 
   return res.send({ message: "OK!" });
 };
