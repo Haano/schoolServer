@@ -11,6 +11,7 @@ module.exports = (mongoose) => {
         // ReceiptDate: Date,
         Category: String,
         Order: Object,
+        telegram: Array,
       },
       { timestamps: true }
     )

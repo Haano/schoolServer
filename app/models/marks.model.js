@@ -11,6 +11,7 @@ module.exports = (mongoose) => {
         cat: String,
         causesID: String,
         countEating: Number,
+        qr: Boolean,
       },
       { timestamps: true }
     )

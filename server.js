@@ -36,6 +36,16 @@ app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
+const axios = require("axios");
+var token = "5509269937:AAE30Smpwl_LBA7YvY7TQAd1igbAttOGl1w";
+app.get("/telegramSend", (req, res) => {
+  axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
+    chat_id: 1036960566,
+    text: "Привет",
+  });
+  res.send("send message");
+});
+
 const db = require("./app/models");
 db.mongoose
   .connect(db.url, {

@@ -31,9 +31,15 @@ module.exports = (app) => {
 
   router.post("/findByClassID/:id", tutorials.findByClassID);
   router.post("/findStudentByClassID/:id", tutorials.findStudentByClassID);
+
+  router.post("/findStudentByID/:id", tutorials.findStudentByID);
+
   router.put("/updateCat/:id", tutorials.updateCat);
   router.put("/updateCatOrderStudent/:id", tutorials.updateCatOrderStudent);
   router.delete("/student/:id", tutorials.deleteStudent);
+
+  router.post("/addTelegramIDChat/:id", tutorials.addTelegramIDChat);
+  router.post("/deleteTelegramIDChat/:id", tutorials.deleteTelegramIDChat);
 
   router.post("/findMarks/:id", tutorials.findMarks);
   router.put("/updateMark/:id", tutorials.updateMark);

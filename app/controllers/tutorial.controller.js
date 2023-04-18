@@ -2,6 +2,10 @@ const db = require("../models");
 module.exports.ClassList = require("../models/classList.model");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
+
+const axios = require("axios");
+var token = "5509269937:AAE30Smpwl_LBA7YvY7TQAd1igbAttOGl1w";
+
 const mongoose = require("mongoose");
 const { time } = require("console");
 
@@ -521,6 +525,56 @@ exports.findStudentByClassID = (req, res) => {
   //   });
   return;
 };
+exports.findStudentByID = (req, res) => {
+  console.log("Find STUDENTS BY ID", req.body);
+
+  const id = req.body.id;
+
+  Students.findById(id, null, { sort: "LastName" })
+    .then((data) => {
+      if (!data)
+        res.status(404).send({ message: "Not found Tutorial with id " + id });
+      else res.send(data);
+    })
+    .catch((err) => {
+      res
+        .status(500)
+        .send({ message: "Error retrieving Tutorial with id=" + id });
+    });
+  return;
+  // const id = req.body.id;
+
+  // Students;
+
+  // if (id != null) {
+  //   Students.find(
+  //     { classID: id },
+  //     null,
+  //     { sort: "FirstName" },
+  //     function (err, arr) {
+  //       const obj = Object.assign({}, arr);
+  //       res.send(obj);
+  //     }
+  //   );
+  // } else {
+  //   Students.find({}, null, { sort: "FirstName" }, function (err, arr) {
+  //     const obj = Object.assign({}, arr);
+  //     res.send(obj);
+  //   });
+  // }
+  // Students.findById(id)
+  //   .then((data) => {
+  //     if (!data)
+  //       res.status(404).send({ message: "Not found Tutorial with id " + id });
+  //     else res.send(data);
+  //   })
+  //   .catch((err) => {
+  //     res
+  //       .status(500)
+  //       .send({ message: "Error retrieving Tutorial with id=" + id });
+  //   });
+  // return;
+};
 
 exports.findByClassID = (req, res) => {
   console.log("FindBY CLASS ID");
@@ -718,7 +772,6 @@ exports.createMarks = async (req, res) => {
   const missingItems = arr.filter(
     (item) => !existingIds.includes(item.studentID)
   );
-
   // console.log("ALL:", allIds.length);
   //console.log("2:", existingRecords);
   //console.log("missingItems", missingItems);
@@ -732,16 +785,106 @@ exports.createMarks = async (req, res) => {
         causesID: item.causesID,
         cat: item.cat,
         countEating: item.countEating,
+        qr: item.qr,
       }))
     )
     .then((data) => {
-      console.log("создано:", data.length);
+      console.log("создано:", data.length, data);
+      for (let i = 0; i < missingItems.length; i++) {
+        Students.findById(missingItems[i].studentID, null, { sort: "LastName" })
+          .then((data) => {
+            console.log(data);
+            if (!data) console.log("error");
+            else {
+              console.log(data);
+              if (data.telegram.length > 0) {
+                for (let j = 0; j < data.telegram.length; j++) {
+                  let msgRes =
+                    missingItems[i].date +
+                    " " +
+                    data.FirstName +
+                    " " +
+                    data.LastName +
+                    "\n" +
+                    "Выставлена отметка " +
+                    missingItems[i].causesID;
+                  if (missingItems[i].countEating >= 1) {
+                    msgRes += " " + missingItems[i].countEating;
+                  }
+                  axios
+                    .post(`https://api.telegram.org/bot${token}/sendMessage`, {
+                      chat_id: data.telegram[i],
+                      text: msgRes,
+                    })
+                    .catch((e) => {
+                      console.log(e.data, "ОШИБКА");
+                    });
+                }
+              }
+            }
+          })
+          .catch((err) => {
+            res.status(500);
+          });
+      }
       res.send({ message: "OK!", countMarks: data.length });
     })
     .catch((err) => {
       res.status(500).send({
         message:
           err.message || "Some error occurred while retrieving tutorials.",
+      });
+    });
+};
+exports.addTelegramIDChat = (req, res) => {
+  if (!req.body) {
+    return res.status(400).send({
+      message: "Data to update can not be empty!",
+    });
+  }
+  console.log("Попытка добавления ", req.body);
+  const id = req.body.studentID;
+  Students.findByIdAndUpdate(id, {
+    $push: {
+      telegram: req.body.chatId,
+    },
+  })
+    .then((data) => {
+      if (!data) {
+        res.status(404).send({
+          message: `Cannot update Telegram with id=${id}. Ошибка`,
+        });
+      } else res.send({ message: "Успешно" });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Error updating Telegram with id=" + id,
+      });
+    });
+};
+exports.deleteTelegramIDChat = (req, res) => {
+  if (!req.body) {
+    return res.status(400).send({
+      message: "Data to update can not be empty!",
+    });
+  }
+  console.log("Попытка удаления ", req.body);
+  const id = req.body.studentID;
+  Students.findByIdAndUpdate(id, {
+    $pull: {
+      telegram: req.body.chatId,
+    },
+  })
+    .then((data) => {
+      if (!data) {
+        res.status(404).send({
+          message: `Cannot update Telegram with id=${id}. Ошибка`,
+        });
+      } else res.send({ message: "Успешно" });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Error updating Telegram with id=" + id,
       });
     });
 };
