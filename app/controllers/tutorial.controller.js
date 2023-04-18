@@ -845,7 +845,7 @@ exports.addTelegramIDChat = (req, res) => {
   console.log("Попытка добавления ", req.body);
   const id = req.body.studentID;
   Students.findByIdAndUpdate(id, {
-    $push: {
+    $addToSet: {
       telegram: req.body.chatId,
     },
   })
