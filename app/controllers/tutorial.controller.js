@@ -789,44 +789,7 @@ exports.createMarks = async (req, res) => {
       }))
     )
     .then((data) => {
-      console.log("создано:", data.length, data);
-      for (let i = 0; i < missingItems.length; i++) {
-        Students.findById(missingItems[i].studentID, null, { sort: "LastName" })
-          .then((data) => {
-            console.log(data);
-            if (!data) console.log("error");
-            else {
-              console.log(data);
-              if (data.telegram.length > 0) {
-                for (let j = 0; j < data.telegram.length; j++) {
-                  let msgRes =
-                    missingItems[i].date +
-                    " " +
-                    data.FirstName +
-                    " " +
-                    data.LastName +
-                    "\n" +
-                    "Выставлена отметка " +
-                    missingItems[i].causesID;
-                  if (missingItems[i].countEating >= 1) {
-                    msgRes += " " + missingItems[i].countEating;
-                  }
-                  axios
-                    .post(`https://api.telegram.org/bot${token}/sendMessage`, {
-                      chat_id: data.telegram[i],
-                      text: msgRes,
-                    })
-                    .catch((e) => {
-                      console.log(e.data, "ОШИБКА");
-                    });
-                }
-              }
-            }
-          })
-          .catch((err) => {
-            res.status(500);
-          });
-      }
+      console.log("создано:", data.length);
       res.send({ message: "OK!", countMarks: data.length });
     })
     .catch((err) => {
