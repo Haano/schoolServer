@@ -3,7 +3,8 @@ module.exports = (app) => {
   const loginAPI = require("../controllers/loginAPI.js");
   const clubsAPI = require("../controllers/clubsAPI.js");
   const adAPI = require("../controllers/adAPI.js");
-
+  const weekMenuAPI = require("../controllers/weekMenuAPI.js");
+  const settingsAPI = require("../controllers/settingsAPI.js");
   var router = require("express").Router();
 
   router.get("/getDateWorld", tutorials.getDateWorld);
@@ -99,5 +100,21 @@ module.exports = (app) => {
   router.get("/getAD", adAPI.getAllAD);
   router.delete("/AD/:id", adAPI.deleteAD);
 
+  //weekMenu
+
+  router.post("/createDayWeekMenu", weekMenuAPI.createDay);
+
+  router.put("/updateDayWeekMenu/:id", weekMenuAPI.updateDayWeekMenu);
+  router.post(
+    "/findDayWeekMenuByDateRange",
+    weekMenuAPI.findDayWeekMenuByDateRange
+  );
+  router.post("/addclassDayWeekMenu", weekMenuAPI.addclassDayWeekMenu);
+
+  router.get("/getTelegramToken", settingsAPI.getTelegramToken);
+
+  router.post("/createTelegramToken", settingsAPI.createTelegramToken);
+
+  router.post("/updateTelegramToken", settingsAPI.updateTelegramToken);
   app.use("/tutorials", router);
 };
