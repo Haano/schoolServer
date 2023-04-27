@@ -64,6 +64,7 @@ exports.updateDayWeekMenu = (req, res) => {
       bludo2: req.body.bludo2,
       bludo3: req.body.bludo3,
       bludo4: req.body.bludo4,
+      day: req.body.day,
     })
     .then((data) => {
       if (!data) {
@@ -75,6 +76,32 @@ exports.updateDayWeekMenu = (req, res) => {
     .catch((err) => {
       res.status(500).send({
         message: "Error updating Tutorial with id=" + id,
+      });
+    });
+};
+exports.deleteDayWeekMenu = (req, res) => {
+  console.log("deleteMenu", console.log(req.body));
+  if (!req.body._id) {
+    res.status(400).send({ message: "Content can not be empty!" });
+    return;
+  }
+  const id = req.body._id;
+  weekMenu
+    .findByIdAndRemove(id)
+    .then((data) => {
+      if (!data) {
+        res.status(404).send({
+          message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`,
+        });
+      } else {
+        res.send({
+          message: "Tutorial was deleted successfully!",
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Could not delete Tutorial with id=" + id,
       });
     });
 };

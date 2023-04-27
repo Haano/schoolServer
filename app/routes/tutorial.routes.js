@@ -103,7 +103,7 @@ module.exports = (app) => {
   //weekMenu
 
   router.post("/createDayWeekMenu", weekMenuAPI.createDay);
-
+  router.post("/deleteDayWeekMenu", weekMenuAPI.deleteDayWeekMenu);
   router.put("/updateDayWeekMenu/:id", weekMenuAPI.updateDayWeekMenu);
   router.post(
     "/findDayWeekMenuByDateRange",
