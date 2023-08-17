@@ -66,7 +66,7 @@ exports.deleteDublecateMarks = (req, res) => {
               });
             }
           }
-        }
+        },
       );
     }
 
@@ -153,7 +153,7 @@ exports.getFile = (req, res) => {
           if (err) return res.status(500).send(err);
 
           res.send("File uploaded!");
-        }
+        },
       );
 
       console.log("Файл можно найти по пути:", dirToFile);
@@ -276,7 +276,7 @@ exports.findRecieptByDateRange = (req, res) => {
         function (err, arr) {
           const obj = Object.assign({}, arr);
           res.send(obj);
-        }
+        },
       );
     } else {
       Reciept.find(
@@ -287,7 +287,7 @@ exports.findRecieptByDateRange = (req, res) => {
         function (err, arr) {
           const obj = Object.assign({}, arr);
           res.send(obj);
-        }
+        },
       );
     }
   } else {
@@ -463,7 +463,7 @@ exports.findMarksByDateRange = (req, res) => {
           const obj = Object.assign({}, arr);
 
           res.send(obj);
-        }
+        },
       );
     } else {
       Marks.find(
@@ -476,7 +476,7 @@ exports.findMarksByDateRange = (req, res) => {
           const obj = Object.assign({}, arr);
 
           res.send(obj);
-        }
+        },
       );
     }
   } else {
@@ -485,7 +485,7 @@ exports.findMarksByDateRange = (req, res) => {
       function (err, arr) {
         const obj = Object.assign({}, arr);
         res.send(obj);
-      }
+      },
     );
   }
 };
@@ -504,7 +504,7 @@ exports.findStudentByClassID = (req, res) => {
       function (err, arr) {
         const obj = Object.assign({}, arr);
         res.send(obj);
-      }
+      },
     );
   } else {
     Students.find({}, null, { sort: "FirstName" }, function (err, arr) {
@@ -761,7 +761,7 @@ exports.createMarks = async (req, res) => {
     arrDate[0],
     arrClassID[0],
     "количество:",
-    arrStudentID.length
+    arrStudentID.length,
   );
   const existingRecords = await Marks.find({
     classID: arrClassID[0],
@@ -770,7 +770,7 @@ exports.createMarks = async (req, res) => {
   });
   const existingIds = existingRecords.map((r) => r.studentID);
   const missingItems = arr.filter(
-    (item) => !existingIds.includes(item.studentID)
+    (item) => !existingIds.includes(item.studentID),
   );
   // console.log("ALL:", allIds.length);
   //console.log("2:", existingRecords);
@@ -786,7 +786,7 @@ exports.createMarks = async (req, res) => {
         cat: item.cat,
         countEating: item.countEating,
         qr: item.qr,
-      }))
+      })),
     )
     .then((data) => {
       console.log("создано:", data.length);
@@ -898,7 +898,7 @@ exports.getAllClass = (req, res) => {
     .then((data) => {
       // Website you wish to allow to connect
       res.header(
-        "ngrok-skip-browser-warning"
+        "ngrok-skip-browser-warning",
         // "Origin, X-Requested-With, Content-Type, Accept",
       );
       res.send(data);
@@ -932,21 +932,32 @@ exports.getAllStudents = (req, res) => {
 };
 
 exports.createStudent = (req, res) => {
-  console.log("createStudent");
+  console.log("createStudent", req.body);
 
   if (!req.body.classID) {
     res.status(400).send({ message: "Content can not be empty!" });
     return;
   }
 
-  const student = new Students({
-    classID: req.body.classID,
-    LastName: req.body.LastName,
-    FirstName: req.body.FirstName,
-    Surname: req.body.Surname,
-    //ReceiptDate: req.body.ReceiptDate,
-    Category: req.body.Category,
-  });
+  let student = "";
+  if (req.body.Order) {
+    student = new Students({
+      classID: req.body.classID,
+      LastName: req.body.LastName,
+      FirstName: req.body.FirstName,
+      Surname: req.body.Surname,
+      Category: req.body.Category,
+      Order: req.body.Order,
+    });
+  } else {
+    student = new Students({
+      classID: req.body.classID,
+      LastName: req.body.LastName,
+      FirstName: req.body.FirstName,
+      Surname: req.body.Surname,
+      Category: req.body.Category,
+    });
+  }
 
   student
     .save(student)
@@ -1105,7 +1116,7 @@ exports.updateMarkAdmin = (req, res) => {
 exports.createMarksEating = (req, res) => {
   Marks.updateMany(
     { causesID: { $eq: "Питался" } },
-    { $set: { countEating: 1 } }
+    { $set: { countEating: 1 } },
   )
     .then((data) => {
       if (!data) {
