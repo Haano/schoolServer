@@ -16,12 +16,12 @@ exports.createINV = (req, res) => {
     serialNumber: req.body.serialNumber,
     group: req.body.group,
     quantity: req.body.quantity,
+    comment: req.body.comment,
     used: req.body.used,
     location: req.body.location,
     federalProgram: req.body.federalProgram,
+    status: req.body.status,
   });
-
-  console.log(invNew);
   invNew
     .save(invNew)
     .then((data) => {
@@ -70,6 +70,7 @@ exports.updateINV = (req, res) => {
     used: true,
     location: req.body.location,
     federalProgram: req.body.federalProgram,
+    status: req.body.status,
   })
     .then((data) => {
       if (!data) {
@@ -81,6 +82,50 @@ exports.updateINV = (req, res) => {
     .catch((err) => {
       res.status(500).send({
         message: "Error updating Tutorial with id=" + id,
+      });
+    });
+};
+
+exports.findINVByID = (req, res) => {
+  console.log("Find INV by id", req.body);
+
+  const id = req.body.id;
+
+  INV.findById(id)
+    .then((data) => {
+      if (!data)
+        res.status(404).send({ message: "Not found Tutorial with id " + id });
+      else res.send(data);
+    })
+    .catch((err) => {
+      res
+        .status(500)
+        .send({ message: "Error retrieving Tutorial with id=" + id });
+    });
+};
+
+exports.deleteINV = (req, res) => {
+  console.log("deleteINV");
+  if (!req.params.id) {
+    res.status(400).send({ message: "Content can not be empty!" });
+    return;
+  }
+  const id = req.params.id;
+  INV.findByIdAndRemove(id)
+    .then((data) => {
+      if (!data) {
+        res.status(404).send({
+          message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`,
+        });
+      } else {
+        res.send({
+          message: "Tutorial was deleted successfully!",
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Could not delete Tutorial with id=" + id,
       });
     });
 };

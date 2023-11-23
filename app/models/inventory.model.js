@@ -12,9 +12,10 @@ module.exports = (mongoose) => {
         quantity: Number,
         used: Boolean,
         federalProgram: String,
+        status: String,
       },
-      { timestamps: true }
-    )
+      { timestamps: true },
+    ),
   );
 
   return inventory;

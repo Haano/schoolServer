@@ -19,7 +19,7 @@ module.exports = (app) => {
   router.post("/loadFileID", tutorials.sendFile);
   router.get(
     "/loadImportStudentsTemplates",
-    tutorials.loadImportStudentsTemplates
+    tutorials.loadImportStudentsTemplates,
   );
   router.post("/deleteDublecateMarks", tutorials.deleteDublecateMarks);
 
@@ -107,7 +107,7 @@ module.exports = (app) => {
   router.put("/updateDayWeekMenu/:id", weekMenuAPI.updateDayWeekMenu);
   router.post(
     "/findDayWeekMenuByDateRange",
-    weekMenuAPI.findDayWeekMenuByDateRange
+    weekMenuAPI.findDayWeekMenuByDateRange,
   );
   router.post("/addclassDayWeekMenu", weekMenuAPI.addclassDayWeekMenu);
 
@@ -121,6 +121,8 @@ module.exports = (app) => {
   router.post("/createINV", inventoryAPI.createINV);
   router.get("/getAllINV", inventoryAPI.getAllINV);
   router.put("/updateINV/:id", inventoryAPI.updateINV);
+  router.post("/findINVByID/:id", inventoryAPI.findINVByID);
+  router.delete("/deleteINV/:id", inventoryAPI.deleteINV);
 
   app.use("/tutorials", router);
 };
