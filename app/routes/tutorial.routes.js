@@ -5,6 +5,7 @@ module.exports = (app) => {
   const adAPI = require("../controllers/adAPI.js");
   const weekMenuAPI = require("../controllers/weekMenuAPI.js");
   const settingsAPI = require("../controllers/settingsAPI.js");
+  const inventoryAPI = require("../controllers/inventoryAPI.js");
   var router = require("express").Router();
 
   router.get("/getDateWorld", tutorials.getDateWorld);
@@ -101,7 +102,6 @@ module.exports = (app) => {
   router.delete("/AD/:id", adAPI.deleteAD);
 
   //weekMenu
-
   router.post("/createDayWeekMenu", weekMenuAPI.createDay);
   router.post("/deleteDayWeekMenu", weekMenuAPI.deleteDayWeekMenu);
   router.put("/updateDayWeekMenu/:id", weekMenuAPI.updateDayWeekMenu);
@@ -116,5 +116,11 @@ module.exports = (app) => {
   router.post("/createTelegramToken", settingsAPI.createTelegramToken);
 
   router.post("/updateTelegramToken", settingsAPI.updateTelegramToken);
+
+  //inventory
+  router.post("/createINV", inventoryAPI.createINV);
+  router.get("/getAllINV", inventoryAPI.getAllINV);
+  router.put("/updateINV/:id", inventoryAPI.updateINV);
+
   app.use("/tutorials", router);
 };

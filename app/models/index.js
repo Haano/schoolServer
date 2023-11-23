@@ -18,4 +18,5 @@ db.reciept = require("./reciept.model.js")(mongoose);
 db.clubs = require("./clubs.model.js")(mongoose);
 db.postAd = require("./postAd.model.js")(mongoose);
 db.weekMenu = require("./weekMenu.model.js")(mongoose);
+db.inventory = require("./inventory.model.js")(mongoose);
 module.exports = db;
