@@ -9,13 +9,14 @@ module.exports = (mongoose) => {
         comment: String,
         group: String,
         location: String,
+        school: String,
         quantity: Number,
         used: Boolean,
         federalProgram: String,
         status: String,
       },
-      { timestamps: true },
-    ),
+      { timestamps: true }
+    )
   );
 
   return inventory;
