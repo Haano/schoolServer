@@ -130,7 +130,7 @@ exports.addclassDayWeekMenu = (req, res) => {
       message: "Data to update can not be empty!",
     });
   }
-  console.log("Попытка добавления ", req.body);
+  console.log("Попытка добавления меню класса ", req.body.className);
   const id = req.body.dayID;
   let check = false;
   weekMenu

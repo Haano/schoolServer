@@ -1,5 +1,5 @@
-//change 10.02.2022 22:08
-
+const https = require("https");
+const fs = require("fs");
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -36,8 +36,6 @@ app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
-
 const db = require("./app/models");
 db.mongoose
   .connect(db.url, {
@@ -55,18 +53,37 @@ db.mongoose
 // set port, listen for requests
 require("./app/routes/tutorial.routes")(app, {});
 
-const PORT = process.env.PORT || 8081;
+const PORT = process.env.PORT || 3000;
 
-let count = 0;
-app
-  .listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}.`);
-  })
-  .on("connection", function (socket) {
-    count++;
-    console.log("Активные подключения ", count);
-    socket.on("close", function () {
-      count--;
-      console.log("Активные подключения ", count);
-    });
-  });
+//если нужно запускать локально
+// let count = 0;
+// app
+//   .listen(PORT, () => {
+//     console.log(`Server is running on port ${PORT}.`);
+//   })
+//   .on("connection", function (socket) {
+//     count++;
+//     console.log("Активные подключения ", count);
+//     socket.on("close", function () {
+//       count--;
+//       console.log("Активные подключения ", count);
+//     });
+//   });
+
+//отсюда убрать для локального запуска
+const options = {
+  key: fs.readFileSync(
+    "/etc/letsencrypt/live/actsch24back.ru/privkey.pem",
+    "utf8"
+  ),
+  cert: fs.readFileSync(
+    "/etc/letsencrypt/live/actsch24back.ru/cert.pem",
+    "utf8"
+  ),
+};
+
+const server = https.createServer(options, app);
+
+server.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}.`);
+});
