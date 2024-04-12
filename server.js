@@ -56,34 +56,57 @@ require("./app/routes/tutorial.routes")(app, {});
 const PORT = process.env.PORT || 3000;
 
 //если нужно запускать локально
-// let count = 0;
-// app
-//   .listen(PORT, () => {
-//     console.log(`Server is running on port ${PORT}.`);
-//   })
-//   .on("connection", function (socket) {
-//     count++;
-//     console.log("Активные подключения ", count);
-//     socket.on("close", function () {
-//       count--;
-//       console.log("Активные подключения ", count);
-//     });
-//   });
+let count = 0;
+
+//const { spawn } = require("node:child_process");
+const { exec } = require("child_process");
+app
+  .listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}.`);
+  })
+  .on("connection", function (socket) {
+    count++;
+    console.log("Активные подключения ", count);
+    socket.on("close", function () {
+      count--;
+      console.log("Активные подключения ", count);
+      
+    if (count == 0) {
+      console.log("Соединение упало!");
+
+      //const bat = spawn("cmd.exe", ["/c", "lt.bat"], {detached:true, stdio: "ignore"});
+      // const bat = spawn("cmd.exe", ["/c", "lt.bat"], {
+      //   detached: true,
+      //   stdio: "ignore",
+      // });
+
+      
+      exec("start lt.lnk", (error, stdout, stderr) => {
+        if (error) {
+          console.error(`exec error: ${error}`);
+          return;
+        }
+        console.log(`stdout: ${stdout}`);
+        console.error(`stderr: ${stderr}`);
+      });
+    }
+    });
+  });
 
 //отсюда убрать для локального запуска
-const options = {
-  key: fs.readFileSync(
-    "/etc/letsencrypt/live/actsch24back.ru/privkey.pem",
-    "utf8"
-  ),
-  cert: fs.readFileSync(
-    "/etc/letsencrypt/live/actsch24back.ru/cert.pem",
-    "utf8"
-  ),
-};
+// const options = {
+//   key: fs.readFileSync(
+//     "/etc/letsencrypt/live/actsch24back.ru/privkey.pem",
+//     "utf8"
+//   ),
+//   cert: fs.readFileSync(
+//     "/etc/letsencrypt/live/actsch24back.ru/cert.pem",
+//     "utf8"
+//   ),
+// };
 
-const server = https.createServer(options, app);
+// const server = https.createServer(options, app);
 
-server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
-});
+// server.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}.`);
+// });
