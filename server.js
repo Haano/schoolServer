@@ -71,16 +71,10 @@ app
       count--;
       console.log("Активные подключения ", count);
       
-    if (count == 0) {
-      console.log("Соединение упало!");
+   if (count == 0) {
+     console.log("Соединение упало!");
 
-      //const bat = spawn("cmd.exe", ["/c", "lt.bat"], {detached:true, stdio: "ignore"});
-      // const bat = spawn("cmd.exe", ["/c", "lt.bat"], {
-      //   detached: true,
-      //   stdio: "ignore",
-      // });
-
-      
+     
       exec("start lt.lnk", (error, stdout, stderr) => {
         if (error) {
           console.error(`exec error: ${error}`);
@@ -89,7 +83,7 @@ app
         console.log(`stdout: ${stdout}`);
         console.error(`stderr: ${stderr}`);
       });
-    }
+   }
     });
   });
 
